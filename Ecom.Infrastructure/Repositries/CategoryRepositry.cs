@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Ecom.Infrastructure.Repositries
 {
-    internal class CategoryRepositry : GenericRepositry<Category>, ICategoryRepositry
+    public class CategoryRepositry : GenericRepositry<Category>, ICategoryRepositry
     {
         public CategoryRepositry(AppDbContext context) : base(context)
         {

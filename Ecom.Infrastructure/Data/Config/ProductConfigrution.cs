@@ -15,15 +15,15 @@ namespace Ecom.Infrastructure.Data.Config
         {
             builder.Property(p => p.Name).IsRequired();
             builder.Property(p => p.Description).IsRequired();
-            builder.Property(p => p.Price).IsRequired().HasColumnType("decimal(18,2)");
-
+            builder.Property(p => p.NewPrice).IsRequired().HasColumnType("decimal(18,2)");
+            //seeding Data
             builder.HasData(
                 new Product
                 {
                     Id = 1,
                     Name = "Test Product",
                     Description = "This is a test product",
-                    Price = 99.99m,
+                    NewPrice = 99.99m,
                     CategoryId = 1 // Assuming this category exists
                 });
 

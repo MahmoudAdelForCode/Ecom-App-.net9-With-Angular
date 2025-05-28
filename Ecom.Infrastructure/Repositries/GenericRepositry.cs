@@ -28,11 +28,7 @@ namespace Ecom.Infrastructure.Repositries
         public async Task<T> DeleteAsync(int id)
         {
             var entity = await _context.Set<T>().FindAsync(id);
-            if (entity != null)
-            {
-                _context.Set<T>().Remove(entity);
-                await _context.SaveChangesAsync();
-            }
+
             return entity;
         }
 
@@ -52,10 +48,6 @@ namespace Ecom.Infrastructure.Repositries
         public async Task<T> GetByIdAsync(int id)
         {
             var entity = await _context.Set<T>().FindAsync(id);
-            if (entity == null)
-            {
-                throw new Exception($"Entity with id {id} not found");
-            }
             return entity;
         }
 

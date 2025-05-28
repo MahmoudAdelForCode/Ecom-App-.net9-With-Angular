@@ -15,6 +15,7 @@ namespace Ecom.Infrastructure.Data.Config
         {
             builder.Property(p => p.Name).IsRequired().HasMaxLength(30);
             builder.Property(p => p.Id).IsRequired();
+            //seeding Data
             builder.HasData(
                 new Category
                 {

@@ -23,8 +23,5 @@ namespace Ecom.Infrastructure.Data
             modelBuilder.ApplyConfigurationsFromAssembly(assembly: Assembly.GetExecutingAssembly());
 
         }
-
-
-
     }
 }
