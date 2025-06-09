@@ -29,17 +29,17 @@ namespace Ecom.Infrastructure.Repositries
         public async Task<bool> AddAsync(AddProductDTO addProductDTO)
         {
             if (addProductDTO == null) return false;
-            var Product=mapper.Map<Product>(addProductDTO);
-           await context.Products.AddAsync(Product);
+            var Product = mapper.Map<Product>(addProductDTO);
+            await context.Products.AddAsync(Product);
             await context.SaveChangesAsync();
 
             var ImagePath = await imageManagementService.AddImagesAsync(addProductDTO.Photo, addProductDTO.Name);
-            var photo=ImagePath.Select(path => new Photo
+            var photo = ImagePath.Select(path => new Photo
             {
                 ImageName = path,
                 ProductId = Product.Id
             }).ToList();
-           await context.Photos.AddRangeAsync(photo);
+            await context.Photos.AddRangeAsync(photo);
             await context.SaveChangesAsync();
             return true;
 
@@ -49,12 +49,12 @@ namespace Ecom.Infrastructure.Repositries
 
         public async Task<bool> UpdateAsync(UpdateProductDTO updateProductDTO)
         {
-          if (updateProductDTO == null)
+            if (updateProductDTO == null)
             {
                 return false;
             }
-          var FindProduct = await context.Products.Include(x => x.Photos).Include(x => x.Category)
-                .FirstOrDefaultAsync(x => x.Id == updateProductDTO.Id);
+            var FindProduct = await context.Products.Include(x => x.Photos).Include(x => x.Category)
+                  .FirstOrDefaultAsync(x => x.Id == updateProductDTO.Id);
             if (FindProduct is null)
             {
                 return false;
@@ -76,7 +76,19 @@ namespace Ecom.Infrastructure.Repositries
             await context.SaveChangesAsync();
             return true;
 
-
         }
+
+        public async Task<bool> DeleteAsync(Product product)
+        {
+            var photo=await context.Photos.Where(x => x.ProductId == product.Id).ToListAsync();
+            foreach (var item in photo)
+            {
+                 imageManagementService.DeleteImageAsync(item.ImageName);
+            }
+            context.Products.Remove(product);
+            await context.SaveChangesAsync();
+            return true;
+        }
+
     }
 }

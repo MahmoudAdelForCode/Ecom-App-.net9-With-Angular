@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Ecom.Infrastructure.Repositries
 {
-    internal class UnitOfWork: IUnitOfWork
+    internal class UnitOfWork : IUnitOfWork
     {
         private readonly AppDbContext _context;
         private readonly IMapper _mapper;
@@ -21,13 +21,12 @@ namespace Ecom.Infrastructure.Repositries
             _mapper = mapper;
             _imageManagementService = imageManagementService;
             CategoryRepositry = new CategoryRepositry(_context);
-            ProductRepositry = new ProductRepositry(_context,_mapper,_imageManagementService);
+            ProductRepositry = new ProductRepositry(_context, _mapper, _imageManagementService);
             PhotoRepositry = new PhotoRepositry(_context);
-           
+
         }
         public ICategoryRepositry CategoryRepositry { get; }
-        public IProductRepositry ProductRepositry { get; }
+        public IProductRepositry ProductRepositry { get; set; }
         public IPhotoRepositry PhotoRepositry { get; }
-
     }
 }

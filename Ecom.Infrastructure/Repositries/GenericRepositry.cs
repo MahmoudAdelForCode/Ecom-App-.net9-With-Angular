@@ -63,6 +63,7 @@ namespace Ecom.Infrastructure.Repositries
 
         public async Task<T> UpdateAsync(T entity)
         {
+
             _context.Entry(entity).State = EntityState.Modified;
             await _context.SaveChangesAsync();
             return entity;

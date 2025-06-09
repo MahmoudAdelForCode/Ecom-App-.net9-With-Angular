@@ -10,8 +10,13 @@ namespace Ecom.API.Controllers
 
     public class ProductController : BaseController
     {
+        private readonly IUnitOfWork work;
+        private readonly IMapper mapper;
+
         public ProductController(IUnitOfWork work, IMapper mapper) : base(work, mapper)
         {
+            this.work = work;
+            this.mapper = mapper;
         }
 
         [HttpGet("get-all-Product")]
@@ -70,7 +75,7 @@ namespace Ecom.API.Controllers
             catch (Exception ex)
             {
 
-                return BadRequest(new ResponseAPI(400,ex.Message));
+                return BadRequest(new ResponseAPI(400, ex.Message));
             }
         }
         [HttpPut("update-Product")]
@@ -78,7 +83,11 @@ namespace Ecom.API.Controllers
         {
             try
             {
-                await work.ProductRepositry.UpdateAsync(updateProductDTO);
+               var result= await work.ProductRepositry.UpdateAsync(updateProductDTO);
+                if (!result)
+                {
+                    return NotFound(new ResponseAPI(404, "Product not found"));
+                }
                 return Ok(new ResponseAPI(200, "Product updated successfully"));
             }
             catch (Exception ex)
@@ -87,5 +96,21 @@ namespace Ecom.API.Controllers
             }
 
         }
+
+        [HttpDelete("delete-Product/{id}")]
+        public async Task<IActionResult> Delete(int id)
+        {
+            try
+            {
+               var product = await work.ProductRepositry.GetByIdAsync(id,x=>x.Photos,x=>x.Category);
+                await work.ProductRepositry.DeleteAsync(product);
+                return Ok(new ResponseAPI(200, "Product deleted successfully"));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new ResponseAPI(400, ex.Message));
+            }
+        }
+
     }
 }
