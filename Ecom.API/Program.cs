@@ -1,5 +1,4 @@
 using Ecom.Infrastructure;
-using Scalar.AspNetCore;
 
 namespace Ecom.API
 {
@@ -10,6 +9,15 @@ namespace Ecom.API
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("CorsPolicy",
+                    builder => builder.AllowCredentials()
+                                      .AllowAnyMethod()
+                                      .AllowAnyHeader()
+                                      .WithOrigins("https:localhost:4200"));
+            });
+
             builder.Services.AddMemoryCache();
             builder.Services.AddControllers();
             // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
@@ -25,18 +33,12 @@ namespace Ecom.API
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {
-                app.MapOpenApi();
+                
                 app.UseSwagger();
                 app.UseSwaggerUI();
-                app.MapScalarApiReference(options =>
-                {
-                    options.WithTitle("Demo Api")
-                           .WithTheme(ScalarTheme.Mars)
-                           .WithDefaultHttpClient(ScalarTarget.CSharp, ScalarClient.HttpClient);
-
-
-                });
+               
             }
+            app.UseCors("CorsPolicy");
             app.UseMiddleware<Ecom.API.Middleware.ExceptionsMiddleware>();
             app.UseStatusCodePagesWithReExecute("/errors/{0}");
 

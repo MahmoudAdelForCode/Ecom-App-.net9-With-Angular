@@ -25,6 +25,10 @@ namespace Ecom.Infrastructure.Repositries
             return entity;
         }
 
+        public async Task<int> CountAsync()=>
+            await _context.Set<T>().CountAsync();
+     
+
         public async Task<T> DeleteAsync(int id)
         {
             var entity = await _context.Set<T>().FindAsync(id);
